@@ -146,8 +146,10 @@ int xe_display_init_nommio(struct xe_device *xe)
 	intel_detect_pch(xe);
 
 	err = intel_power_domains_init(xe);
-	if (err)
+	if (err) {
+		intel_power_domains_cleanup(xe);
 		return err;
+	}
 
 	return drmm_add_action_or_reset(&xe->drm, xe_display_fini_nommio, xe);
 }
